@@ -1,0 +1,122 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+main {
+    min-height: 100vh;
+    position: relative;
+    background: #21002e;
+    color: rgba(132, 132, 138, 0.457);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+article.glass {
+    min-height: 40vh;
+    width: 40vw;
+    background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.2)
+  );
+    box-shadow: 20px 20px 50px rgba(129, 129, 129, 0.5);
+    border-radius: 2rem;
+    z-index: 2;
+    backdrop-filter: blur(2rem);
+    display: flex;
+}
+.left-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align: center;
+    background: linear-gradient(
+      to right bottom,
+      rgba(255, 255, 255, 0.7),
+      rgba(255, 255, 255, 0.3)
+    );
+    border-radius: 2rem;
+}
+.right-side {
+    flex: 1;
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    color: rgb(74, 74, 78);
+}
+section.glass:after{
+    content: "";
+    clear: both;
+}
+.background-circles {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.background-circles span.bg-circle {
+    width: 80vmin;
+    height: 80vmin;
+    border-radius: 80vmin;
+    backface-visibility: hidden;
+    position: absolute;
+    animation-name: move;
+    animation-duration: 600s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+.background-circles span.bg-circle:nth-child(1) {
+    color: #b31b3f;
+    top: 60%;
+    left: 100%;
+    animation-duration: 80s;
+    animation-name: movereverse;
+    animation-delay: -30s;
+    transform-origin: 80vw 200vh;
+    box-shadow: -120vmin -120vmin 50vmin currentColor;
+}
+.background-circles span.bg-circle:nth-child(2) {
+    color: #7b003e;
+    top: 10%;
+    left: 32%;
+    animation-duration: 90s;
+    animation-delay: -70s;
+    transform-origin: -200vw 500vh;
+    box-shadow: -160vmin 0 33.5840990924vmin currentColor;
+}
+.background-circles span.bg-circle:nth-child(3) {
+    color: #82003f;
+    top: 100%;
+    left: 100%;
+    animation-name: movereverse;
+    animation-duration: 80s;
+    animation-delay: -78.5s;
+    transform-origin: 12vw 6vh;
+    box-shadow: 160vmin 0 43.481977892vmin currentColor;
+}
+.background-circles span.bg-circle:nth-child(4) {
+    color: #b31b3f;
+    top: 70%;
+    left: 0%;
+    animation-duration: 70s;
+    animation-delay: 0s;
+    transform-origin: 20vw 200vh;
+    box-shadow: 160vmin 0 41.2831160008vmin currentColor;
+}
+@keyframes move{
+    
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@keyframes movereverse{
+    100% {
+        transform: rotate(-360deg);
+    }
+}

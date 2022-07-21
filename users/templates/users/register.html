@@ -1,0 +1,32 @@
+{% extends "HusseinAh/base.html" %}
+{% load static %}
+{% block title %}
+Registration
+{% endblock title %}
+{% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+{% endblock style %}
+{% block base %}
+
+{% if messages %}
+<div class="alert">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+
+<div>
+    {% load crispy_forms_tags %}
+<form action="{% url 'users:register' %}" method="POST">
+    <fieldset>
+        <legend>Registration</legend>
+    {% csrf_token %}
+    <table>
+    {{ form|crispy }}
+    <tr><td><input type="submit" value="register"></td></tr>
+    </table>
+</fieldset>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "HusseinAh/base.html" %}
+{% load static %}
+{% block title %}
+Login
+{% endblock title %}
+{% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/usersstyle.css' %}">
+{% endblock style %}
+{% block base %}
+
+{% if message %}
+<div class="alert">{{ message }}</div>
+{% endif %}
+
+<div>
+    {% load crispy_forms_tags %}
+<form action="{% url 'users:login' %}" method="POST">
+    <fieldset>
+        <legend>Login</legend>
+    {% csrf_token %}
+    <table>
+        <input type="hidden" name="next" value="{{ next }}">
+    {{ form|crispy }}
+    <tr><td><input type="submit" value="login"></td></tr>
+    </table>
+    <a href="{% url 'password_reset' %}">reset your password</a>
+    </fieldset>
+</form>
+</div>
+{% endblock %}

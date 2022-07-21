@@ -1,0 +1,12 @@
+{% extends "HusseinAh/base.html" %}
+{% load static %}
+{% block title %}
+Logged out
+{% endblock title %}
+{% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+{% endblock style %}
+{% block base %}
+<h1 class="alert">Logged out</h1>
+<a href="{% url 'users:login' %}">login</a>
+{% endblock %}

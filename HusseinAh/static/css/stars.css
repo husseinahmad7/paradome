@@ -1,0 +1,117 @@
+.sky{ 
+  /* background:radial-gradient(200% 100% at bottom center,#F7F7B6,#E96F92,#75517D,#1B2947);  */
+
+  /* background:radial-gradient(220% 105% at top center,#1B2947 10%,#75517D 40%,#E96F92 65%,#F7F7B6);  */
+  background-attachment:fixed; 
+  overflow:hidden;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 4em - 90px);
+
+
+}
+@keyframes rotate{
+  0%{
+    transform:perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(0);
+  } 
+  100%{
+    transform:perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(-360deg);
+  } 
+}
+.stars{
+  transform:perspective(500px);
+  transform-style:preserve-3d;
+  position:absolute;
+  bottom:0;
+  perspective-origin:50% 100%;
+  left:50%;
+  animation:rotate 90s infinite linear;
+}
+.star{
+  width:2px;
+  height:2px;
+  background:#F7F7B6;
+  border-radius:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  transform-origin:0 0 -300px;
+  transform:translate3d(0,0,-300px);
+  backface-visibility:hidden;
+}
+span.glow {
+    margin: 0;
+    padding-bottom: 4rem;
+    z-index: 1;
+    font-family: 'Teko', sans-serif;
+    font-size:8rem;
+    text-transform: uppercase;
+    animation: glow 2s ease-in-out infinite alternate;
+    text-align: center;
+    position: absolute;
+    bottom: 6rem;
+    -webkit-text-stroke: thick;
+}
+@keyframes glow {
+    from {
+      text-shadow: 0 0 20px #2d9da9;
+    }
+    to {
+      text-shadow: 0 0 30px #34b3c1, 0 0 10px #4dbbc7;
+    }
+  }
+@media (max-width: 768px) {
+    span.glow {
+        font-size: 4rem;
+    }
+}
+.intro-text {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.intro-text .static-txt {
+    color: #fff;
+    font-size: 30px;
+    font-weight: 400;
+}
+.intro-text .dynamic-txts {
+    line-height: 90px;
+    height: 90px;
+    margin-left: 15px;
+    overflow: hidden;
+}
+.dynamic-txts li{
+    list-style: none;
+    font-size: 40px;
+    font-weight: 500;
+    color:#2d9da9;
+    position: relative;
+    top: 0;
+    animation: slide 6s steps(4) infinite;
+}
+@keyframes slide{
+    100%{
+        top: -360px;
+    }
+}
+.dynamic-txts li span{
+    position: relative;
+}
+.dynamic-txts li span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: #21002e;
+    border-left: 2px solid #2d9da9;
+    animation: typing 1.5s steps(10) infinite;
+}
+@keyframes typing {
+    100%{
+        left: 100%;
+        margin: 0 -35px 0 35px;
+    }
+}

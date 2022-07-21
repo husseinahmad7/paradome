@@ -1,0 +1,22 @@
+{% extends 'HusseinAh/base.html' %}
+
+{% block base %}
+
+<div>
+    {% load crispy_forms_tags %}
+<form method="POST" enctype="multipart/form-data">
+    <fieldset>
+        <legend>New post</legend>
+    {% csrf_token %}
+    <table>
+    {{ form|crispy }}
+    <!-- <a target="_popup" onclick="window.open()" id="add_id_tags" href="{% url 'posts:addtag'%}" title="Add another Tag">
+        add tag
+    </a> -->
+    
+    <tr><td><input type="submit" value="post"></td></tr>
+    </table>
+</fieldset>
+</form>
+</div>
+{% endblock %}

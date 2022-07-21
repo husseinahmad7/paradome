@@ -1,0 +1,48 @@
+{% extends "HusseinAh/base.html" %}
+{% load static %}
+{% block title %}
+Store
+{% endblock title %}
+
+{% block style %}{% endblock %}
+
+{% block base%}
+<main>
+    <div class="level is-mobile">
+    <div class="level-item has-text-centered">
+        <h1>welcome to my shope</h1>
+    </div>
+        <div class="level-item">
+            <a href="{% url 'store:cart' %}" id="cart">
+                my cart
+                <span class="badge">
+                    {{cart|length}}
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <div class="columns is-multiline is-mobile is-centered">
+        <div class="column is-one-fifty">
+            <form method="get" action=".">
+                <input name="query" type="text" placeholder="Search">
+                <button>Search</button>
+            </form>
+            <ul>
+                {{for category in categories}}
+                <li>
+                    <a href="{%url 'store:StoreIndex' %}?c={{category.slug}}" 
+                    class="{% if category.slug == active_category%}is-info{%else%}is-light{%endif%}">
+                        {% category.name %}
+                    </a>
+                    {{category.name}}
+                </li>
+                {{endif}}
+            </ul>
+            
+        </div>
+    {{ include 'products.html'}}
+    </div>
+</main>
+<script src="https://unpkg.com/htmx.org@1.7.0"></script>
+{% endblock %}

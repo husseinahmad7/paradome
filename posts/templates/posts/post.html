@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>posts</title>
+        {% load static %}
+
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        
+        
+    </head>
+    <body style="margin-bottom: 134px !important;">
+        <main>
+        <div class="columns is-centered">
+            <div class="column is-11">
+            <div class="card">
+            <div class="card-content">
+               <div class="media">
+                   <div class="media-left">
+                       {% if object.user.profile.picture %}
+                       <figure class="image is-48x48">
+                           <img class="is-rounded" src="{{ object.user.profile.picture.url }}" alt="{{ object.user.username }} image">
+                         </figure>
+                       {% else %}
+                       <figure class="image is-48x48">
+                       <img class="is-rounded" src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                     </figure>
+                       {% endif %}
+                     
+                   </div>
+                   <div class="media-content">
+                     <p class="title is-4"><a href="{% url 'posts:user-posts' object.user.username %}">{{ object.user.username }}</a></p>
+                     <p class="subtitle is-6">{{ object.user.username }}</p>
+                     {% if object.user == user %}
+                        <div>
+                        <a href="{% url 'posts:post-update' object.pk %}">update</a>
+                        <a href="{% url 'posts:post-delete' object.pk %}">delete</a>
+                        </div>
+                    {%endif%}
+                   </div>
+                 </div>
+                 <div class="card-header">
+                   <div class="card-header-title is-centered">
+                       {{ object.question_text }}
+                   </div>
+               </div>
+            </div>
+            <p>{{ object.picture.url }}</p>
+            <p>{{ object.picture.path }}</p>
+           <div class="card-image">
+               {% if object.picture %}
+               <figure class="image is-4by3">
+                   <img src="{{ object.picture.url }}" alt="{{object.picture.tags.first}}">
+                 </figure>
+               {% endif %}
+             
+           </div>
+           <div class="card-content">
+               
+         
+             <div class="content">
+                 <pre>{{ object.content }}</pre>
+                 
+                 {%for tag in object.tags.all %}
+        
+               <span class="tag is-info is-light"><a href="{{ tag.get_absolute_url }}">{{tag}}</a></span>
+                {% endfor %}
+               <br>
+               <time datetime="2016-1-1">{{ object.posted_date }}</time>
+             </div>
+           </div>
+           <div class="card-footer">
+               <div class="card-footer-item">
+                   <a href="{% url 'posts:like' object.pk %}">{{object.likes}} like{{object.likes|pluralize}}</a>
+               </div>
+               <div class="card-footer-item">
+                   <a href="{% url 'posts:post-detail' object.pk %}" >{{object.comment_count}} comment{{object.comment_count|pluralize}}</a>
+               </div>
+               {% if  user.is_authenticated %}
+               {% if favorite is True %}
+                <div class="card-footer-item">
+                  <a href="{% url 'posts:favorite' post.pk %}">remove from saved</a>
+                </div>
+                {% else %}
+               <div class="card-footer-item">
+                   <a href="{% url 'posts:favorite' post.pk %}">add to saved</a>
+               </div>
+                {% endif %}
+                {% endif %}
+           </div>
+         </div>
+        </div>
+        </div>
+        
+         <!-- add comment form -->
+        <nav class="navbar is-fixed-bottom">
+          <form method="post">
+            {% csrf_token %}
+            <div class="field has-addons-centered">
+               <div class="control">
+                   {{ form }}
+               </div>
+               <div class="control">
+                   <button class="button is-light" type="submit">comment</button>
+               </div>
+            </div>
+       </form>
+      </nav>
+        <!-- comments -->
+        {% if object.comments.all %}
+
+        {% for comment in page_obj %}
+        <div class="box">
+            <article class="media">
+              <div class="media-left">
+                {% if comment.user.profile.picture %}
+                <figure class="image is-48x48">
+                    <img src="{{ comment.user.profile.picture.path }}" alt="{{ comment.user.profile.username }}">
+                  </figure>
+                  {% else %}
+                    <figure class="image is-48x48">
+                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="{{ comment.user.profile.username }}">
+                    </figure>
+                {% endif %}
+              </div>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <strong>{{comment.user}}</strong>  <small>{{comment.commented}}</small>
+                    <br>
+                    <pre>{{comment.comment}}</pre>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+        
+        
+        {% endfor %}
+                <nav class="pagination is-flex is-justify-content-center is-align-content-center" role="navigation" aria-label="pagination">
+                {% if page_obj.has_previous %}
+                <a class="pagination-previous" href="?page=1">first</a>
+                <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">back</a>
+                {%endif%}
+                {% if page_obj.has_next %}
+                <a class="pagination-next" href="?page={{ page_obj.next_page_number }}">load more</a>
+                {% endif %}
+                </nav>
+        {% else %}
+        <p>no comments yet..</p>
+        {%endif%}
+        
+        
+
+        
+        </main>
+    </body>
+</html>

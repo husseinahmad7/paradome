@@ -1,0 +1,37 @@
+{% if product%}
+<div class="card">
+    <div class="card-content">
+        <div class="media">
+            <div class="media-left">
+                {{product.seller.username}}
+            </div>
+            <div class="media-content">
+                {{product.created_at}}
+            </div>
+
+        </div>
+    </div>
+    <div class="card-header">
+        {{product.name}}
+    </div>
+    <div class="card-image">
+        {% if product.image %}
+        <figure class="image is-4by3">
+            <img src="{{ product.image.url }}" alt="{{product.name}}">
+          </figure>
+        {% endif %}
+      
+    </div>
+    <div class="card-content">
+        <div class="content">
+            {{product.description}}
+            {{product.price}}
+        </div>
+        <div class="card-footer">
+            <div class="card-footer-item">
+                <a href="" hx-get="{% url 'store:addtocart' product.id %}" hx-target="#cart" hx-swap="outerHTML">Add to cart</a> 
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

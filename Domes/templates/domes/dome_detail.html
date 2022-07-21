@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{{dome.title}}</title>
+        {% load static %}
+
+        {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"> {% endcomment %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        
+        
+    </head>
+    <body style="margin-bottom: 134px !important;">
+        <main>
+        <div class="columns is-centered">
+            <div class="column is-11">
+            <div class="card">
+                <div class="card-image">
+                    {% if dome.banner %}
+                    <figure class="image is-4by3">
+                        <img src="{{ dome.banner.url }}" alt="{{dome.title}}">
+                      </figure>
+                    {% endif %}
+                </div>
+                <div class="card-image">
+                    {% if dome.picture %}
+                    <figure class="image is-96x96 is-rounded">
+                        <img src="{{ dome.picture.url }}" alt="{{dome.title}}">
+                      </figure>
+                    {% endif %}
+                </div>
+            <div class="card-content">
+               <div class="media">
+                   <div class="media-left">
+                       {% if dome.user.profile.picture %}
+                       <figure class="image is-48x48">
+                           <img class="is-rounded" src="{{ dome.user.profile.picture.url }}" alt="{{ dome.user.username }} image">
+                         </figure>
+                       {% else %}
+                       <figure class="image is-48x48">
+                       <img class="is-rounded" src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                     </figure>
+                       {% endif %}
+                     
+                   </div>
+                   <div class="media-content">
+                     <p class="title is-4"><a href="{% url 'posts:user-posts' dome.user.username %}">{{ dome.user.username }}</a></p>
+                     <p class="subtitle is-6">{{ dome.user.username }}</p>
+                     {% if dome.user == user %}
+                        <div>
+                        <a href="">update</a>
+                        <a href="">delete</a>
+                        </div>
+                    {%endif%}
+                   </div>
+                 </div>
+                 <div class="card-header">
+                   <div class="card-header-title is-centered">
+                       {{ dome.title }}
+                   </div>
+               </div>
+            </div>
+           <div class="card-content">
+             <div class="content">
+                 <pre>{{ dome.description }}</pre>
+               <br>
+               <time datetime="2016-1-1">{{ dome.posted_date }}</time>
+             </div>
+           </div>
+           <div class="card-footer">
+               <div class="card-footer-item">
+                   <a href="">dome.likes likedome.likes|pluralize</a>
+               </div>
+               <div class="card-footer-item">
+                   <a href="" >dome.comment_count commentdome.comment_count|pluralize</a>
+               </div>
+               {% comment %} {% if  user.is_authenticated %}
+               {% if favorite is True %}
+                <div class="card-footer-item">
+                  <a href="{% url 'posts:favorite' post.pk %}">remove from saved</a>
+                </div>
+                {% else %}
+               <div class="card-footer-item">
+                   <a href="{% url 'posts:favorite' post.pk %}">add to saved</a>
+               </div>
+                {% endif %}
+                {% endif %} {% endcomment %}
+           </div>
+         </div>
+        </div>
+        </div>
+        {% comment %} posts for the dome {% endcomment %}
+        <div class="columns is-mobile">
+          <div class="column is-2">
+            <ul>
+              <li><a hx-get="{% url 'posts:htmxdomeposts' dome.id %}" hx-trigger="click" hx-target="#main-content" hx-swap="innerHTML">posts</a></li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+          </div>
+          <div class="column is-8 is-centered">
+            <div class="container" id="main-content"></div>
+            {% comment %} {% include 'domes/dome_detail_posts.html' %} {% endcomment %}
+          </div>
+          <div class="column">
+            {% include 'domes/dome_detail_categories.html' %}
+          </div>
+        </div>
+                
+                
+
+        {% comment %} <nav class="navbar is-fixed-bottom">
+          <form method="post">
+            {% csrf_token %}
+            <div class="field has-addons-centered">
+               <div class="control">
+                   {{ form }}
+               </div>
+               <div class="control">
+                   <button class="button is-light" type="submit">comment</button>
+               </div>
+            </div>
+       </form>
+      </nav>
+        <!-- comments -->
+        {% if dome.comments.all %}
+
+        {% for comment in page_obj %}
+        <div class="box">
+            <article class="media">
+              <div class="media-left">
+                {% if comment.user.profile.picture %}
+                <figure class="image is-48x48">
+                    <img src="{{ comment.user.profile.picture.path }}" alt="{{ comment.user.profile.username }}">
+                  </figure>
+                  {% else %}
+                    <figure class="image is-48x48">
+                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="{{ comment.user.profile.username }}">
+                    </figure>
+                {% endif %}
+              </div>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <strong>{{comment.user}}</strong>  <small>{{comment.commented}}</small>
+                    <br>
+                    <pre>{{comment.comment}}</pre>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+        
+        
+        {% endfor %}
+                <nav class="pagination is-flex is-justify-content-center is-align-content-center" role="navigation" aria-label="pagination">
+                {% if page_obj.has_previous %}
+                <a class="pagination-previous" href="?page=1">first</a>
+                <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">back</a>
+                {%endif%}
+                {% if page_obj.has_next %}
+                <a class="pagination-next" href="?page={{ page_obj.next_page_number }}">load more</a>
+                {% endif %}
+                </nav>
+        {% else %}
+        <p>no comments yet..</p>
+        {%endif%} {% endcomment %}
+        
+        
+
+        
+        </main>
+    </body>
+    <script src="{% static 'js/htmx.min.js' %}" defer></script>
+    <script>
+      document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{csrf_token}}';
+      })
+    </script>
+</html>

@@ -1,0 +1,23 @@
+<a href="{% url 'domes:category-create' object.pk %}">create category</a>
+{% if object.categories.all %}
+<div class="content is-small">
+{% for category in object.categories.all %}
+<div class="box">
+            <h1 class="title">{{category.title}}</h2>
+            <a class="is-link" href="{% url 'chat:chatchannel-create' category.id %}">add chat channel</a>
+    {%for chat in category.chat_chnls.all %}
+    <div class="block {% ifchanged %}
+    {% cycle 'is-primary is-light' 'is-info is-light'%}
+    {% endifchanged %}">
+        <h2>
+            <a hx-get="{% url 'chat:chat-channel' chat.id %}" hx-trigger="click" hx-target="#main-content" hx-swap="innerHTML">{{chat.title}}</a>
+        </h2>
+        <div>{{chat.topic}}</div>
+    </div>
+    {%endfor%}
+</div>
+{% endfor %}
+</div>
+{%else%}
+<div class="bd-notification is-danger">no categories</div>
+{% endif %}
