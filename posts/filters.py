@@ -1,4 +1,3 @@
-from django.forms.widgets import Widget
 import django_filters
 from .models import Post, Tag
 from django import forms

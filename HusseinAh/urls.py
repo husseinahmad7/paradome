@@ -6,6 +6,9 @@ from django.conf.urls.static import static
 app_name = 'HusseinAh'
 urlpatterns = [
     path('', views.home, name='home'),
-    path('glass', views.glass, name= 'glass'),
-    path('ex', views.example, name='ex')
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] 
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -10,7 +10,7 @@ admin.AdminSite.site_header = 'Posts'
 admin.AdminSite.site_title = 'Posts admin'
 class PostsAdmin(admin.ModelAdmin):
     date_hierarchy = 'posted_date'
-    fields = ('user','picture','question_text','content', 'tags','dome')
+    fields = ('user','picture','question_text','content', 'tags','dome', 'likes')
     inlines = [CommentsInline]
     list_display = ('question_text', 'user', 'posted_date', 'was_posted_recently')
     list_filter = ['posted_date']
@@ -20,3 +20,5 @@ admin.site.register(Post, PostsAdmin)
 admin.site.register(Tag)
 admin.site.register(Follow)
 admin.site.register(Stream)
+admin.site.register(Comment)
+

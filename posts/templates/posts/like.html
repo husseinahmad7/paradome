@@ -1,5 +1,5 @@
 {% if liked %}
-<a hx-post="{% url 'posts:like' pk %}" hx-swap="outerHTML" class="is-primary">{{likes}} like{{likes|pluralize}}</a>
+<a hx-post="{% url 'posts:like' pk %}" hx-target="#like{{pk}}" hx-swap="innerHtml" class="button is-link">{{likes}} like{{likes|pluralize}}</a>
 {% else %}
-<a hx-post="{% url 'posts:like' pk %}" hx-swap="outerHtml">{{likes}} like{{likes|pluralize}}</a>
+<a hx-post="{% url 'posts:like' pk %}" hx-target="#like{{pk}}" hx-swap="innerHtml">{{likes}} like{{likes|pluralize}}</a>
 {% endif %}

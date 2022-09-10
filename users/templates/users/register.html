@@ -3,9 +3,6 @@
 {% block title %}
 Registration
 {% endblock title %}
-{% block style %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-{% endblock style %}
 {% block base %}
 
 {% if messages %}
@@ -16,17 +13,18 @@ Registration
 </div>
 {% endif %}
 
-<div>
     {% load crispy_forms_tags %}
-<form action="{% url 'users:register' %}" method="POST">
-    <fieldset>
-        <legend>Registration</legend>
-    {% csrf_token %}
-    <table>
-    {{ form|crispy }}
-    <tr><td><input type="submit" value="register"></td></tr>
-    </table>
-</fieldset>
-</form>
+<div class="container">
+    <form action="{% url 'users:register' %}" method="POST">
+        <fieldset>
+            <legend>Registration</legend>
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <div class="control">
+            <button id="submit-btn" class="button is-primary" type="submit">Send</button>
+        </div>
+        </fieldset>
+    </form>
 </div>
 {% endblock %}

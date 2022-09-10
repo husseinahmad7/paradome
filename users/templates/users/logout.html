@@ -3,10 +3,16 @@
 {% block title %}
 Logged out
 {% endblock title %}
-{% block style %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-{% endblock style %}
+ 
 {% block base %}
-<h1 class="alert">Logged out</h1>
-<a href="{% url 'users:login' %}">login</a>
+<section class="hero is-danger">
+    <div class="hero-body has-text-centered">
+      <p class="title">
+        <h1 class="alert">Logged out</h1>
+      </p>
+      <p class="subtitle">
+        <a class="button" href="{% url 'users:login' %}">login</a>
+      </p>
+    </div>
+  </section>
 {% endblock %}

@@ -3,29 +3,43 @@
 {% block title %}
 Login
 {% endblock title %}
-{% block style %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-<link rel="stylesheet" type="text/css" href="{% static 'css/usersstyle.css' %}">
-{% endblock style %}
+
 {% block base %}
 
 {% if message %}
-<div class="alert">{{ message }}</div>
+<section class="hero is-warning">
+    <div class="hero-body">
+      <p class="title">
+        Warning:
+      </p>
+      <p class="subtitle">
+        {{ message }}
+      </p>
+    </div>
+  </section>
 {% endif %}
 
-<div>
-    {% load crispy_forms_tags %}
-<form action="{% url 'users:login' %}" method="POST">
-    <fieldset>
-        <legend>Login</legend>
-    {% csrf_token %}
-    <table>
-        <input type="hidden" name="next" value="{{ next }}">
-    {{ form|crispy }}
-    <tr><td><input type="submit" value="login"></td></tr>
-    </table>
-    <a href="{% url 'password_reset' %}">reset your password</a>
-    </fieldset>
-</form>
-</div>
+
+<section class="hero is-link is-fullheight-with-navbar">
+    <div class="hero-body" style="justify-content: space-around">
+        <div class="has-text-centered">
+        {% load crispy_forms_tags %}
+        <form action="{% url 'users:login' %}" method="POST">
+            <fieldset>
+                <legend>Login</legend>
+            {% csrf_token %}
+            <table>
+                <input type="hidden" name="next" value="{{ next }}">
+            {{ form|crispy }}
+            
+            <div class="control">
+                <button id="submit-btn" class="button is-primary" type="submit">Send</button>
+            </div>
+            </table>
+            <a href="{% url 'password_reset' %}">reset your password</a>
+            </fieldset>
+        </form>
+    </div>
+    </div>
+</section>
 {% endblock %}

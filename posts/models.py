@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.db.models.signals import post_save
 from Domes.models import Dome
+from ckeditor.fields import RichTextField
 
 def user_directory_path(instance,filename):
      return f'posts/{filename}'
@@ -18,7 +19,7 @@ class Tag(models.Model):
         verbose_name = 'Tag'
         verbose_name_plural = 'tags'
     def get_absolute_url(self):
-        return reverse('posts:tags', args=[self.slug])
+        return f"{reverse('posts:index')}?question_text=&tags={self.pk}"
     def __str__(self):
         return self.title
     def save(self, *args, **kwargs):
@@ -29,12 +30,13 @@ class Tag(models.Model):
 class Post(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200)
-    content = models.TextField(max_length=2000)
+    content = RichTextField(config_name='default')
+    # content = models.TextField(max_length=2000)
     picture = models.ImageField(upload_to=user_directory_path,null=True, blank=True)
     likes = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag, related_name="tags", blank=True)
     posted_date = models.DateTimeField(default=timezone.now)
-    dome = models.ForeignKey(Dome, on_delete=models.CASCADE,related_name= 'posts',null=True)
+    dome = models.ForeignKey(Dome, on_delete=models.CASCADE,related_name= 'posts',null=True, blank=True)
     
     def __str__(self):
         return self.question_text
@@ -55,14 +57,26 @@ class Post(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
-    comment = models.TextField(max_length=255)
+    comment = RichTextField(config_name='comment')
     commented = models.DateTimeField(auto_now_add=True)
+    reply_to = models.ForeignKey('self', null=True, blank=True, related_name='replied_to', on_delete=models.CASCADE)
     
     #approved boolean def approved(self): self.approved = True self.save()
     def __str__(self):
         return f"{self.post.question_text} -- {self.comment[:20]} -- by {self.user}"
     class Meta:
          get_latest_by='-commented'
+         ordering = ['-commented']
+        
+    @property 
+    def children(self):
+        return Comment.objects.filter(reply_to=self)
+    
+    @property
+    def is_parent(self):
+        if self.reply_to is None:
+            return True
+        return False
 
 class Follow(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="follower")
@@ -76,11 +90,15 @@ class Stream(models.Model):
     
     def add_post(sender, instance, *args, **kwargs):
         post= instance
-        user = post.user
-        followers = Follow.objects.all().filter(following=user)
-        for follower in followers:
-            stream = Stream(post=post, user=follower.follower , following= user, date=post.posted_date)
-            stream.save()
+        
+        if post.dome is not None and post.dome.privacy == 0:
+            return
+        else:
+            user = post.user
+            followers = Follow.objects.all().filter(following=user)
+            for follower in followers:
+                stream = Stream(post=post, user=follower.follower , following= user, date=post.posted_date)
+                stream.save()
             
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_likes")

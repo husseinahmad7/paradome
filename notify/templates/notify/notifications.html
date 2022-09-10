@@ -1,15 +1,8 @@
 {% extends "HusseinAh/base.html" %}
 
-        {% block style %}
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-        
-        {% endblock %}
-
 {% block base %}
 {% load humanize %}
 <main>
-<p>{{ request.user.username }}</p>
-
 {% for notification in notifications %}
 <div class="notification is-info">
     <a class="delete" href="{% url 'notify:del' notification.pk %}"></a>

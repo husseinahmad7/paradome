@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'rest_framework',
-    'rest_framework.authtoken',
+    # 'rest_framework',
+    # 'rest_framework.authtoken',
     'HusseinAh',
     'users',
     'posts',
@@ -56,10 +56,12 @@ INSTALLED_APPS = [
     # 'apiapp',
     'store',
     'django_filters',
+    'ckeditor',
 
 
     # 'django_extensions',
     'crispy_forms',
+    'crispy_bulma',
     # 'social_django'
 ]
 
@@ -112,7 +114,7 @@ DATABASES = {
         'USER': DB_USER,
         'PASSWORD': DB_PASSWORD,
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '5432'
     },
     # 'new': {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -170,11 +172,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     # ...
+#     ("chat", "Chat/static/chat"),
+# ]
 # MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
 # MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'Bulma'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma",)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -208,3 +217,12 @@ REST_FRAMEWORK = {
     ]
 }
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+    },
+    'comment': {
+        'toolbar': 'basic',
+        'height': 200,
+    },
+}

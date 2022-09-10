@@ -1,5 +1,7 @@
-{% extends 'users/base.html' %}
-
+{% extends 'HusseinAh/base.html' %}
+{% block title %}
+Add Tag
+{% endblock title %}
 {% block base %}
 
 <div>
@@ -10,7 +12,7 @@
     {% csrf_token %}
     <table>
     {{ form|crispy }}
-    <tr><td><input type="submit" value="post"></td></tr>
+    <tr><td><input class="button is-secondary" type="submit" value="Add"></td></tr>
     </table>
 </fieldset>
 </form>

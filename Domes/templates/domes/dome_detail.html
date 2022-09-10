@@ -1,112 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>{{dome.title}}</title>
-        {% load static %}
+{% extends "HusseinAh/base.html" %}
+{% load static %}
+{% block title %}
+{{dome.title}}
+{% endblock title %}
 
-        {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"> {% endcomment %}
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-        
-        
-    </head>
-    <body style="margin-bottom: 134px !important;">
-        <main>
-        <div class="columns is-centered">
-            <div class="column is-11">
-            <div class="card">
-                <div class="card-image">
-                    {% if dome.banner %}
-                    <figure class="image is-4by3">
-                        <img src="{{ dome.banner.url }}" alt="{{dome.title}}">
-                      </figure>
-                    {% endif %}
-                </div>
-                <div class="card-image">
-                    {% if dome.picture %}
-                    <figure class="image is-96x96 is-rounded">
-                        <img src="{{ dome.picture.url }}" alt="{{dome.title}}">
-                      </figure>
-                    {% endif %}
-                </div>
-            <div class="card-content">
-               <div class="media">
-                   <div class="media-left">
-                       {% if dome.user.profile.picture %}
-                       <figure class="image is-48x48">
-                           <img class="is-rounded" src="{{ dome.user.profile.picture.url }}" alt="{{ dome.user.username }} image">
-                         </figure>
-                       {% else %}
-                       <figure class="image is-48x48">
-                       <img class="is-rounded" src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                     </figure>
-                       {% endif %}
-                     
-                   </div>
-                   <div class="media-content">
-                     <p class="title is-4"><a href="{% url 'posts:user-posts' dome.user.username %}">{{ dome.user.username }}</a></p>
-                     <p class="subtitle is-6">{{ dome.user.username }}</p>
-                     {% if dome.user == user %}
-                        <div>
-                        <a href="">update</a>
-                        <a href="">delete</a>
-                        </div>
-                    {%endif%}
-                   </div>
-                 </div>
-                 <div class="card-header">
-                   <div class="card-header-title is-centered">
-                       {{ dome.title }}
-                   </div>
-               </div>
-            </div>
-           <div class="card-content">
-             <div class="content">
-                 <pre>{{ dome.description }}</pre>
-               <br>
-               <time datetime="2016-1-1">{{ dome.posted_date }}</time>
-             </div>
-           </div>
-           <div class="card-footer">
-               <div class="card-footer-item">
-                   <a href="">dome.likes likedome.likes|pluralize</a>
-               </div>
-               <div class="card-footer-item">
-                   <a href="" >dome.comment_count commentdome.comment_count|pluralize</a>
-               </div>
-               {% comment %} {% if  user.is_authenticated %}
-               {% if favorite is True %}
-                <div class="card-footer-item">
-                  <a href="{% url 'posts:favorite' post.pk %}">remove from saved</a>
-                </div>
-                {% else %}
-               <div class="card-footer-item">
-                   <a href="{% url 'posts:favorite' post.pk %}">add to saved</a>
-               </div>
-                {% endif %}
-                {% endif %} {% endcomment %}
-           </div>
-         </div>
+{% block base%}
+<main>
+
+  <div class="columns is-mobile">
+    <div class="column is-2">
+      <div id="dropdown-domes" class="dropdown">
+        <div class="dropdown-trigger">
+          <button id="domesbtn" class="button" aria-haspopup="true" aria-controls="dropdown-menu3">
+            <span>Domes</span>
+          </button>
         </div>
+        <div class="dropdown-menu" id="dropdown-menu3" role="menu">
+          <div class="dropdown-content" hx-get="{%url 'domes:user-domes' %}" hx-trigger="revealed" hx-swap="innerHTML" style="overflow-y: scroll;max-height:70vh">
+          </div>
         </div>
-        {% comment %} posts for the dome {% endcomment %}
-        <div class="columns is-mobile">
-          <div class="column is-2">
+      </div>
+      <aside class="menu">
+        <p class="menu-label">
+          General
+        </p>
+        <ul class="menu-list">
+          <li>
+            <a hx-get="{% url 'domes:dome-info' dome.id %}" hx-target="#main-content" hx-swap="innerHTML">Info</a>
+          </li>
+          <li><a hx-get="{% url 'posts:htmxdomeposts' dome.id %}" hx-trigger="click" hx-target="#main-content" hx-swap="innerHTML">Posts</a></li>
+          <li><a hx-get="{% url 'domes:dome-members' dome.id %}" hx-trigger="click" hx-target="#main-content" hx-swap="innerHTML">Members</a></li>
+        </ul>
+        <p class="menu-label">
+          Upcomming Features
+        </p>
+        <ul class="menu-list">
+          <li><a>Bookify</a></li>
+          <li><a>Events</a></li>
+          <li>
+            <a>Manage Your Team</a>
             <ul>
-              <li><a hx-get="{% url 'posts:htmxdomeposts' dome.id %}" hx-trigger="click" hx-target="#main-content" hx-swap="innerHTML">posts</a></li>
-              <li></li>
-              <li></li>
-              <li></li>
+              <li><a>Tasks</a></li>
+              <li><a>Polls</a></li>
+              <li><a>Invitations</a></li>
             </ul>
-          </div>
-          <div class="column is-8 is-centered">
-            <div class="container" id="main-content"></div>
-            {% comment %} {% include 'domes/dome_detail_posts.html' %} {% endcomment %}
-          </div>
-          <div class="column">
-            {% include 'domes/dome_detail_categories.html' %}
-          </div>
-        </div>
+          </li>
+          <li><a>Statics</a></li>
+          <li><a>rules</a></li>
+        </ul>
+      </aside>
+    </div>
+    <div class="column is-8 is-centered">
+      <div class="container" id="main-content">
+        {% include 'domes/dome_info.html'%}
+      </div>
+    </div>
+
+    <div class="column">
+      {% include 'domes/dome_detail_categories.html' %}
+    </div>
+  </div>
                 
                 
 
@@ -171,11 +124,15 @@
 
         
         </main>
-    </body>
     <script src="{% static 'js/htmx.min.js' %}" defer></script>
     <script>
       document.body.addEventListener('htmx:configRequest', (event) => {
         event.detail.headers['X-CSRFToken'] = '{{csrf_token}}';
+      });
+      domeBtn = document.querySelector('#domesbtn');
+      domesDropdown = document.querySelector('#dropdown-domes');
+      domeBtn.addEventListener('click', ()=>{
+        domesDropdown.classList.toggle('is-active')
       })
     </script>
-</html>
+  {%endblock base%}

@@ -1,14 +1,33 @@
 from django import forms
-from .models import Post, Comment
+from .models import Post, Comment,Tag
+# from ckeditor.widgets import CKEditorWidget
 
 class PostCreation(forms.ModelForm):
-    tags = forms.CharField(label='tags (seperated by comma)', help_text='example: (tag1,tag2,tag3, etc..)',widget=forms.TextInput(attrs={'class': 'input is-medium'}))
-    # tags_titles = forms.CharField(label='tags (seperated by comma)',widget=forms.TextInput(attrs={'class': 'input is-medium'}))
+    tags = forms.ModelMultipleChoiceField(Tag.objects.all().order_by('title'))
     class Meta:
         model = Post
         fields=['picture','question_text','content','tags']
 class CommentCreation(forms.ModelForm):
-    comment = forms.CharField(max_length=90, label='add comment',widget=forms.TextInput(attrs={'class': 'input is-medium'}))
     class Meta:
         model = Comment
         fields = ['comment']
+
+class CommentReplyCreation(forms.ModelForm):
+    comment = forms.CharField(widget=forms.Textarea(attrs={'cols':30, 'rows':3,'class':'textarea is-small'}))
+    class Meta:
+        model = Comment
+        fields = ['comment']
+class TagCreation(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['title']
+        
+    def clean(self):
+        data = self.cleaned_data
+        title = data.get("title")
+        qs = Tag.objects.filter(title__exact=title)
+        if qs.exists():
+            self.add_error("Tag", f"\"{title}\" is already in use. Please pick another title.")
+            # raise forms.ValidationError("Office is not allowed")
+            
+        return data

@@ -2,7 +2,19 @@ from django.db import models
 from django.contrib.auth.models import User
 import os
 from django.conf import settings
+from django.urls import reverse
+from django.utils.text import slugify
 
+
+
+def generate_random():
+    from django.utils.crypto import get_random_string
+    string = get_random_string(length=11)
+    number = 1
+    while Dome.objects.filter(invitationstr=string).exists():
+        string = f'{string}{number}'
+        number += 1
+    return string
 
 def dome_directory_path_banner(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
@@ -30,14 +42,20 @@ class Dome(models.Model):
     description = models.CharField(max_length=144, null=False, blank=False)
     date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='server_owner')
-    members = models.ManyToManyField(User, related_name='server_members')
-    moderators = models.ManyToManyField(User, related_name='server_moderators')
+    members = models.ManyToManyField(User, related_name='dome_members', blank=True)
+    moderators = models.ManyToManyField(User, related_name='dome_moderators', blank=True)
     # categories = models.ManyToManyField(Category)
     PRIVACY_CHOICES = ((1,'Public'), (0,'Private'),)
     privacy = models.IntegerField(choices=PRIVACY_CHOICES, default=1)
+    invitationstr = models.CharField(default=generate_random, max_length=13, null=False, unique=True)
         
     def __str__(self):
         return self.title
+    def get_absolute_url(self):
+        return reverse('domes:dome-detail', kwargs={'pk':self.pk})
+    def get_invitation_link(self):
+        slug = slugify(self.title)
+        return reverse('domes:dome-invitation', kwargs={'slug': slug,'code':self.invitationstr})
     
 class Category(models.Model):
     title = models.CharField(max_length=35)
@@ -47,3 +65,21 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+
+# class DomeMembership(models.Model):
+#     class Access(models.IntegerChoices):
+#         MEMBER = 1            # Can view and create and move only own items
+#         ADMIN = 2             # Can remove members and modify project settings.
+
+#     dome = models.ForeignKey(
+#         Dome, on_delete=models.CASCADE)
+#     member = models.ForeignKey(
+#         User, on_delete=models.CASCADE)
+#     access_level = models.IntegerField(choices=Access.choices, default=1)
+#     # created_at = models.DateTimeField(default=timezone.now)
+
+#     def __str__(self):
+#         return f'{self.member.user_name} , {self.dome.title}'
+
+#     class Meta:
+#         unique_together = ('dome', 'member')

@@ -6,15 +6,16 @@
     {% load crispy_forms_tags %}
 <form method="POST" enctype="multipart/form-data">
     <fieldset>
-        <legend>New post</legend>
+        <legend>What to publish</legend>
     {% csrf_token %}
     <table>
+        {{form.media}}
     {{ form|crispy }}
-    <!-- <a target="_popup" onclick="window.open()" id="add_id_tags" href="{% url 'posts:addtag'%}" title="Add another Tag">
+    <a class="is-link is-light" target="_blank" rel="noopener noreferrer" id="add_id_tags" href="{% url 'posts:tag-create'%}" title="Add another Tag">
         add tag
-    </a> -->
+    </a>
     
-    <tr><td><input type="submit" value="post"></td></tr>
+    <tr><td><input class="button is-secondary" type="submit" value="Done"></td></tr>
     </table>
 </fieldset>
 </form>

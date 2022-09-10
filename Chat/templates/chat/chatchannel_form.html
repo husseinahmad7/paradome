@@ -1,10 +1,8 @@
 {% extends 'HusseinAh/base.html' %}
 {% block title %}
-Create Category
+Create Chat Channel
 {% endblock title %}
-{% block style %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-{% endblock style %}
+
 {% block base %}
 
 <div>
@@ -13,11 +11,9 @@ Create Category
     <fieldset>
         <legend>New Chat channel</legend>
     {% csrf_token %}
-    <table>
     {{ form|crispy }}
     
-    <tr><td><input type="submit" value="Create"></td></tr>
-    </table>
+    <input class="button is-primary" type="submit" value="Create">
 </fieldset>
 </form>
 </div>
